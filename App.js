@@ -8,6 +8,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import UserRoutes from "./Users/routes.js";
 import QuizRoutes from "./Kanbas/Quizzes/routes.js";
+import QuizQuestionRoutes from "./Kanbas/Quizzes/QuizQuestions/routes.js";
 import "dotenv/config";
 import session from "express-session";
 
@@ -53,4 +54,5 @@ Lab5(app);
 Hello(app);
 UserRoutes(app);
 QuizRoutes(app)
+QuizQuestionRoutes(app);
 app.listen(process.env.PORT || 4000);
