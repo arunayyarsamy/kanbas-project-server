@@ -73,6 +73,13 @@ const QuizSchema = new mongoose.Schema({
     untilDate: {
         type: Date,
     },
+    published: {
+        type: Boolean,
+        default: false,
+    },
+    questions: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'QuizzesQuestionsModel'}
+    ]
 }, {collection: 'quizzes'});
 
 export default QuizSchema;
