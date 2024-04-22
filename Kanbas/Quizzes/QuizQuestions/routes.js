@@ -37,7 +37,7 @@ function QuizQuestionRoutes(app) {
 
     const findQuestionById = async (req, res) => {
         const questionId = req.params.quid;
-        const question = await dao.findById(questionId);
+        const question = await dao.findQuestionById(questionId);
         res.json(question);
     }
 
