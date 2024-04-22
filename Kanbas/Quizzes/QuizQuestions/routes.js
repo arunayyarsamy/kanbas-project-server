@@ -13,14 +13,9 @@ function QuizQuestionRoutes(app) {
     }
 
     const updateQuestion = async (req, res) => {
-        const quizId = req.params.qid;
         const questionId = req.params.quid;
-        const question = req.body;
-        const quiz = await quizModel.findById(quizId);
-        const index = quiz.questions.findIndex(question => question._id == questionId);
-        quiz.questions[index] = question;
-        await quiz.save();
-        res.json(quiz);
+        const question  = await dao.updateQuizQuestion(questionId, req.body);
+        res.json(question);
     }
 
     const deleteQuestion = async (req, res) => {
@@ -41,10 +36,8 @@ function QuizQuestionRoutes(app) {
     }
 
     const findQuestionById = async (req, res) => {
-        const quizId = req.params.qid;
         const questionId = req.params.quid;
-        const quiz = await dao.findById(quizId);
-        const question = quiz.questions.find(question => question._id == questionId);
+        const question = await dao.findById(questionId);
         res.json(question);
     }
 
