@@ -3,7 +3,7 @@ import model from "./model.js";
 export const findAllQuizzes = (idList) => model.find({_id: {$in: idList}});
 
 
-export const findQuizById = (quizQuestionId) => model.findById(quizQuestionId);
+export const findQuestionById = (quizQuestionId) => model.findById(quizQuestionId);
 
 export const createQuizQuestion = (question) => {
     return model.create(question);
