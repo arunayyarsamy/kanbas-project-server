@@ -18,7 +18,7 @@ function QuizRoutes(app) {
     }
 
     const createQuiz = async (req, res) => {
-        const quizData = req.body;
+        var quizData = req.body;
         quizData = {...quizData, courseId: req.params.cid}
         const quiz = await dao.createQuiz(req.body);
         res.send(quiz);
