@@ -30,18 +30,18 @@ function QuizRoutes(app) {
             res.status(406).send("Quiz not editable");
         }
         const quiz = await dao.findQuizById(req.params.qid);
-        res.json(quiz).sendStatus(200);
+        res.json(quiz);
     }
 
     const deleteQuiz = async (req, res) => {
         const status = await dao.deleteQuiz(req.params.qid);
-        res.json(status).sendStatus(200);
+        res.json(status);
     }
 
     const publishQuiz = async (req, res) => {
         const publishStatus = req.body.published;
         const status = await dao.updateQuiz(req.params.qid, {published: publishStatus});
-        res.json(status).sendStatus(200);
+        res.json(status);
     }
 
     app.get("/api/quizzes", getAllQuizzes);
@@ -50,8 +50,7 @@ function QuizRoutes(app) {
     app.post("/api/courses/:cid/quizzes", createQuiz);
     app.put("/api/quizzes/:qid", updateQuiz);
     app.delete("/api/quizzes/:qid", deleteQuiz);
-    app.post("/api/quizzes/:qid/publish", publishQuiz);
-
+    app.put("/api/quizzes/:qid/publish", publishQuiz);
 }
 
 export default QuizRoutes;
