@@ -1,5 +1,6 @@
 import * as dao from "./dao.js";
 import * as quizQuestionsDao from "./QuizQuestions/dao.js";
+import * as quizPreviewDao from "./QuizPreview/dao.js";
 
 function QuizRoutes(app) {
 
@@ -46,17 +47,30 @@ function QuizRoutes(app) {
     }
 
     const submitQuiz = async (req, res) => {
-        const quizId = req.params.qid;
+        // const quizId = req.params.qid;
         const chosenAnswersData = req.body;
-        // const quiz = await dao.findQuizById(quizId);
-        // const questions = quiz.questions;
         let score = 0;
         for (let i = 0; i < chosenAnswersData.length; i++) {
             const question = await quizQuestionsDao.findQuestionById(chosenAnswersData[i]._id);
-            if (JSON.stringify(question.answer) === JSON.stringify(chosenAnswersData[i].answer)) {
+            if (JSON.stringify(question.answer) === JSON.stringify(chosenAnswersData[i].chosenAnswer)) {
                 score += question.points;
             }
         }
+        const username = req.session["currentUser"] !== undefined ? req.session["currentUser"].username : "anonymous";
+        let quizPreview = null;
+        if(username !== "anonymous") {
+            quizPreview = await quizPreviewDao.findAttemptWithUsernameAndQuiz(username, req.params.qid);
+        }
+        if(quizPreview !== null) {
+            res.status(406).send("Quiz already submitted");
+            return;
+        }
+        await quizPreviewDao.createAttempt({
+            quizId: req.params.qid,
+            username: username,
+            score: score,
+            chosenAnswers: req.body
+        });
         res.json({score: score});
     }
 
