@@ -71,6 +71,16 @@ export default function UserRoutes(app) {
     res.json(currentUser);
   };
 
+  const isLoggedIn = (req, res) => {
+    // res.json({ isAuthenticated: true });
+    const currentUser = req.session["currentUser"];
+    if (currentUser) {
+      res.json({isAuthenticated: true, user: currentUser});
+    } else {
+      res.json({isAuthenticated: false});
+    }
+  };
+
   app.post("/api/users", createUser);
   app.get("/api/users", findAllUsers);
   app.get("/api/users/:userId", findUserById);
@@ -80,5 +90,5 @@ export default function UserRoutes(app) {
   app.post("/api/users/signin", signin);
   app.post("/api/users/signout", signout);
   app.post("/api/users/profile", profile);
-
+  app.post("/api/users/isloggedin", isLoggedIn);
 }
