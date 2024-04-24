@@ -30,6 +30,7 @@ function QuizRoutes(app) {
         const status = await dao.updateQuiz(req.params.qid, req.body);
         if (status.modifiedCount === 0) {
             res.status(406).send("Quiz not editable");
+            return;
         }
         const quiz = await dao.findQuizById(req.params.qid);
         res.json(quiz);
@@ -57,12 +58,13 @@ function QuizRoutes(app) {
             }
         }
         const username = req.session["currentUser"] !== undefined ? req.session["currentUser"].username : "anonymous";
+        console.log(req.session["currentUser"]);
         let quizPreview = null;
         if(username !== "anonymous") {
             quizPreview = await quizPreviewDao.findAttemptWithUsernameAndQuiz(username, req.params.qid);
         }
         if(quizPreview !== null) {
-            res.status(406).send("Quiz already submitted");
+            res.status(206).send("Quiz already submitted");
             return;
         }
         await quizPreviewDao.createAttempt({

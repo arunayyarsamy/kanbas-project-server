@@ -14,7 +14,12 @@ export default function CourseRoutes(app) {
   }
 
   const findAllCourses = async (req, res) => {
-    const courses = await dao.findAllCourses();
+    let courses = [];
+    if (req.session.currentUser === undefined) {
+      courses = await dao.findAllCourses();
+    } else {
+      courses = await dao.findCoursesForUser(req.session.currentUser.registeredCourses);
+    }
     res.json(courses);
   }
 

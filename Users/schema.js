@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
       enum: ["STUDENT", "FACULTY", "ADMIN", "USER"],
       default: "USER",
     },
+    registeredCourses: [
+        {type: String, ref: 'CourseModel'}
+    ]
   },
   { collection: "users" }
 );
