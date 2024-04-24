@@ -1,4 +1,5 @@
 import * as dao from "./dao.js";
+import * as quizQuestionsDao from "./QuizQuestions/dao.js";
 
 function QuizRoutes(app) {
 
@@ -44,6 +45,21 @@ function QuizRoutes(app) {
         res.json(status);
     }
 
+    const submitQuiz = async (req, res) => {
+        const quizId = req.params.qid;
+        const chosenAnswersData = req.body;
+        // const quiz = await dao.findQuizById(quizId);
+        // const questions = quiz.questions;
+        let score = 0;
+        for (let i = 0; i < chosenAnswersData.length; i++) {
+            const question = await quizQuestionsDao.findQuestionById(chosenAnswersData[i]._id);
+            if (JSON.stringify(question.answer) === JSON.stringify(chosenAnswersData[i].answer)) {
+                score += question.points;
+            }
+        }
+        res.json({score: score});
+    }
+
     app.get("/api/quizzes", getAllQuizzes);
     app.get("/api/courses/:cid/quizzes", getQuizzesForCourse);
     app.get("/api/quizzes/:qid", getQuizById);
@@ -51,6 +67,7 @@ function QuizRoutes(app) {
     app.put("/api/quizzes/:qid", updateQuiz);
     app.delete("/api/quizzes/:qid", deleteQuiz);
     app.put("/api/quizzes/:qid/publish", publishQuiz);
+    app.post("/api/quizzes/:qid/submit", submitQuiz);
 }
 
 export default QuizRoutes;
